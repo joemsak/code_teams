@@ -8,15 +8,13 @@ RSpec.describe CodeTeams::Plugin, 'helper integration' do
 
   describe 'helper methods' do
     context 'with a single implicit method' do
-      before do
-        test_plugin_class = Class.new(described_class) do
+      let!(:TestPlugin) do
+        Class.new(described_class) do
           def test_plugin
             data = @team.raw_hash['extra_data']
             Data.define(:foo, :bar).new(data['foo'], data['bar'])
           end
         end
-
-        stub_const('TestPlugin', test_plugin_class)
       end
 
       it 'adds a helper method to the team' do
@@ -30,16 +28,14 @@ RSpec.describe CodeTeams::Plugin, 'helper integration' do
       end
 
       context 'when the data accessor name is overridden' do
-        before do
-          test_plugin_class = Class.new(described_class) do
+        let!(:TestPlugin) do
+          Class.new(described_class) do
             data_accessor_name 'foo'
 
             def foo
               Data.define(:bar).new('bar')
             end
           end
-
-          stub_const('TestPlugin', test_plugin_class)
         end
 
         it 'adds the data accessor name to the team' do
@@ -80,6 +76,10 @@ RSpec.describe CodeTeams::Plugin, 'helper integration' do
     test_plugin_class = Class.new(described_class) do
       def test_plugin
         Data.define(:foo).new('foo')
+      end
+
+      def name
+        'TestPlugin'
       end
     end
 

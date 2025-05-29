@@ -20,14 +20,16 @@ module CodeTeams
       @data_accessor_name ||= key
     end
 
-    sig { returns(String) }
+    sig { returns(T.nilable(String)) }
     def self.default_data_accessor_name
       Utils.underscore(Utils.demodulize(name))
     end
 
     sig { params(base: T.untyped).void }
     def self.inherited(base) # rubocop:disable Lint/MissingSuper
-      all_plugins << T.cast(base, T.class_of(Plugin))
+      plugin = T.cast(base, T.class_of(Plugin))
+      all_plugins << plugin
+      Team.register_plugin(plugin)
     end
 
     sig { returns(T::Array[T.class_of(Plugin)]) }
