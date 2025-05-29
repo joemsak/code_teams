@@ -20,7 +20,7 @@ module CodeTeams
       @data_accessor_name ||= key
     end
 
-    sig { returns(T.nilable(String)) }
+    sig { returns(String) }
     def self.default_data_accessor_name
       Utils.underscore(Utils.demodulize(name))
     end
